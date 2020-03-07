@@ -114,7 +114,7 @@ Have fun !
 ## Other examples
 Have a look at [HattoriBot](https://github.com/hrt/HattoriBot) that has written a game hack using this fork
 
-## Contact
+## Contact of original author
 by mail: contact@n1nj4.eu  
 on Twitter: [Follow me on twitter](https://twitter.com/n1nj4sec)  
 
