@@ -266,20 +266,21 @@ class WinProcess(BaseProcess):
 
    
     def list_modules(self):
-        module_list = []
+        # returns a dictionary of module name to base address
+        module_list = {}
         if self.pid is not None:
-            hModuleSnap = CreateToolhelp32Snapshot(TH32CS_CLASS.SNAPMODULE, self.pid)
+            hModuleSnap = CreateToolhelp32Snapshot(TH32CS_CLASS.SNAPMODULE | TH32CS_CLASS.SNAPMODULE32, self.pid)
             if hModuleSnap is not None:
                 module_entry = MODULEENTRY32()
                 module_entry.dwSize = sizeof(module_entry)
-                success = Module32First(hModuleSnap, byref(module_entry))
+                success = Module32First(hModuleSnap, pointer(module_entry))
                 while success:
-                    if module_entry.th32ProcessID == self.pid:
-                        module_list.append(copy.copy(module_entry))
-                    success = Module32Next(hModuleSnap, byref(module_entry))
+                    module_list[module_entry.szModule] = ((cast(pointer(module_entry.modBaseAddr), POINTER(c_uint32))).contents.value)
+                    success = Module32Next(hModuleSnap, pointer(module_entry))
 
                 kernel32.CloseHandle(hModuleSnap)
         return module_list
+
 
     def get_symbolic_name(self, address):
         for m in self.list_modules():
