@@ -87,16 +87,16 @@ class PROCESSENTRY32(Structure):
 
 
 class MODULEENTRY32(Structure):
-    _fields_ = [('dwSize', c_uint),
-     ('th32ModuleID', c_uint),
-     ('th32ProcessID', c_uint),
-     ('GlblcntUsage', c_uint),
-     ('ProccntUsage', c_uint),
-     ('modBaseAddr', c_uint),
-     ('modBaseSize', c_uint),
-     ('hModule', c_uint),
-     ('szModule', c_char * 256),
-     ('szExePath', c_char * 260)]
+    _fields_ = [ ( 'dwSize' , DWORD ) , 
+        ( 'th32ModuleID' , DWORD ),
+        ( 'th32ProcessID' , DWORD ),
+        ( 'GlblcntUsage' , DWORD ),
+        ( 'ProccntUsage' , DWORD ) ,
+        ( 'modBaseAddr' , POINTER(BYTE)) ,
+        ( 'modBaseSize' , DWORD ) , 
+        ( 'hModule' , HMODULE ) ,
+        ( 'szModule' , c_char * 256 ),
+        ( 'szExePath' , c_char * 260 ) ]
 
 
 class THREADENTRY32(Structure):
