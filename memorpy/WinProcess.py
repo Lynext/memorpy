@@ -283,21 +283,8 @@ class WinProcess(BaseProcess):
 
 
     def get_symbolic_name(self, address):
-        for m in self.list_modules():
-            if int(m.modBaseAddr) <= int(address) < int(m.modBaseAddr + m.modBaseSize):
-                return '%s+0x%08X' % (m.szModule, int(address) - m.modBaseAddr)
-
         return '0x%08X' % int(address)
 
-    def hasModule(self, module):
-        if module[-4:] != '.dll':
-            module += '.dll'
-        module_list = self.list_modules()
-        for m in module_list:
-            if module in m.szExePath.split('\\'):
-                return True
-        return False
-    
 
     def get_instruction(self, address):
         """
