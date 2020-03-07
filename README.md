@@ -6,7 +6,7 @@ This is a fixed fork of memorypy, a python library using ctypes to search/edit w
 pip install https://github.com/hrt/memorpy/archive/master.zip
 ```
 # usage examples :
-```
+```python
 >>> from memorpy import MemWorker, Process
 >>> mem = MemWorker(name="Brawlhalla.exe")
 >>> modules = mem.process.list_modules()
@@ -15,8 +15,6 @@ pip install https://github.com/hrt/memorpy/archive/master.zip
 
 >>> print(mem.Address(modules["Brawlhalla.exe"]).read())
 9460301
-```
-
 ```
 
 In this example open a notepad.exe and type in some text we will edit from memory !
