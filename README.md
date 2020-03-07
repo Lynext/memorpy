@@ -112,7 +112,7 @@ I hope this code will be useful to someone.
 
 Have fun !
 ## Other examples
-Have a look at [mimipy](https://github.com/n1nj4sec/mimipy) that dumps passwords from various processes memory
+Have a look at [HattoriBot](https://github.com/hrt/HattoriBot) that has written a game hack using this fork
 
 ## Contact
 by mail: contact@n1nj4.eu  
