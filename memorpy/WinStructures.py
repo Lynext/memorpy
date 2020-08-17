@@ -23,7 +23,7 @@ else:
     ULONG_PTR = c_ulong
 
 
-class SECURITY_DESCRIPTOR(Structure): 
+class SECURITY_DESCRIPTOR(Structure):
     _fields_ = [
         ('SID', DWORD),
         ('group', DWORD),
@@ -87,13 +87,13 @@ class PROCESSENTRY32(Structure):
 
 
 class MODULEENTRY32(Structure):
-    _fields_ = [ ( 'dwSize' , DWORD ) , 
+    _fields_ = [ ( 'dwSize' , DWORD ) ,
         ( 'th32ModuleID' , DWORD ),
         ( 'th32ProcessID' , DWORD ),
         ( 'GlblcntUsage' , DWORD ),
         ( 'ProccntUsage' , DWORD ) ,
         ( 'modBaseAddr' , POINTER(BYTE)) ,
-        ( 'modBaseSize' , DWORD ) , 
+        ( 'modBaseSize' , DWORD ) ,
         ( 'hModule' , HMODULE ) ,
         ( 'szModule' , c_char * 256 ),
         ( 'szExePath' , c_char * 260 ) ]
@@ -110,7 +110,7 @@ class THREADENTRY32(Structure):
 
 
 class TH32CS_CLASS(object):
-    INHERIT = 2147483648L
+    INHERIT = 2147483648
     SNAPHEAPLIST = 1
     SNAPMODULE = 8
     SNAPMODULE32 = 16

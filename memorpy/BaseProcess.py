@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF8 -*-
 
-import utils
+import memorpy.utils as utils
 import struct
 
 """ Base class for process not linked to any platform """
@@ -38,14 +38,14 @@ class BaseProcess(object):
     def read(self, address, type = 'uint', maxlen = 50, errors='raise'):
         if type == 's' or type == 'string':
             s = self.read_bytes(int(address), bytes=maxlen)
-            news = ''
-            for c in s:
-                if c == '\x00':
-                    return news
-                news += c
-            if errors=='ignore':
-                return news
-            raise ProcessException('string > maxlen')
+            try:
+                idx = s.index(b'\x00')
+                return s[:idx]
+            except:
+                if errors == 'ignore':
+                    return s
+
+                raise ProcessException('string > maxlen')
         else:
             if type == 'bytes' or type == 'b':
                 return self.read_bytes(int(address), bytes=maxlen)
@@ -58,5 +58,3 @@ class BaseProcess(object):
             return self.write_bytes(int(address), struct.pack(s, data))
         else:
             return self.write_bytes(int(address), data)
-   
-

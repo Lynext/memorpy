@@ -17,14 +17,14 @@ import sys
 import string
 import re
 import logging
-import Process
-import utils
+import memorpy.Process as Process
+import memorpy.utils as utils
 import struct
-from Address import Address
-from BaseProcess import ProcessException
+from .Address import Address
+from .BaseProcess import ProcessException
 import traceback
 import binascii
-from structures import *
+from .structures import *
 
 logger = logging.getLogger('memorpy')
 
@@ -132,17 +132,17 @@ class MemWorker(object):
             index = b.find(value, index + 1)
 
     def mem_search(self, value, ftype = 'match', protec = PAGE_READWRITE | PAGE_READONLY, optimizations=None, start_offset = None, end_offset = None):
-        """ 
+        """
                 iterator returning all indexes where the pattern has been found
         """
-        
+
         # pre-compile regex to run faster
         if ftype == 're' or ftype == 'groups' or ftype == 'ngroups':
-            
+
             # value should be an array of regex
             if type(value) is not list:
                 value = [value]
-            
+
             tmp = []
             for reg in value:
                 if type(reg) is tuple:
@@ -168,8 +168,8 @@ class MemWorker(object):
 
         # different functions avoid if statement before parsing the buffer
         if ftype == 're':
-            func = self.parse_re_function        
-        
+            func = self.parse_re_function
+
         elif ftype == 'groups':
             func = self.parse_groups_function
 
@@ -187,7 +187,7 @@ class MemWorker(object):
             raise ProcessException("Can't read_bytes, process %s is not open" % (self.process.pid))
 
         for offset, chunk_size in self.process.iter_region(start_offset=start_offset, end_offset=end_offset, protec=protec, optimizations=optimizations):
-            b = ''
+            b = b''
             current_offset = offset
             chunk_read = 0
             chunk_exc = False
@@ -195,7 +195,7 @@ class MemWorker(object):
                 try:
                     b += self.process.read_bytes(current_offset, chunk_size)
                 except IOError as e:
-                    print traceback.format_exc()
+                    print(traceback.format_exc())
                     if e.errno == 13:
                         raise
                     else:
@@ -220,5 +220,3 @@ class MemWorker(object):
                 else:
                     for res in func(b, value, offset):
                         yield res
-
-

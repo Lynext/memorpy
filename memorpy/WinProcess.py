@@ -15,12 +15,12 @@
 # along with memorpy.  If not, see <http://www.gnu.org/licenses/>.
 
 from ctypes import pointer, sizeof, windll, create_string_buffer, c_ulong, byref, GetLastError, c_bool, WinError, cast, c_uint32
-from structures import *
+from .structures import *
 import copy
 import struct
-import utils
+import memorpy.utils
 import platform
-from BaseProcess import BaseProcess, ProcessException
+from .BaseProcess import BaseProcess, ProcessException
 
 psapi       = windll.psapi
 kernel32    = windll.kernel32
@@ -39,12 +39,12 @@ class WinProcess(BaseProcess):
         super(WinProcess, self).__init__()
         if pid:
             self._open(int(pid), debug=debug)
-            
+
         elif name:
             self._open_from_name(name, debug=debug)
         else:
             raise ValueError("You need to instanciate process with at least a name or a pid")
-        
+
         if self.is_64bit():
             si = self.GetNativeSystemInfo()
             self.max_addr = si.lpMaximumApplicationAddress
@@ -183,7 +183,7 @@ class WinProcess(BaseProcess):
         return old_protect.value
 
     def iter_region(self, start_offset=None, end_offset=None, protec=None, optimizations=None):
-        
+
         offset = start_offset or self.min_addr
         end_offset = end_offset or self.max_addr
 
@@ -240,7 +240,7 @@ class WinProcess(BaseProcess):
         address = int(address)
         buffer = create_string_buffer(bytes)
         bytesread = c_size_t(0)
-        data = ''
+        data = b''
         length = bytes
         while length:
             if RpM(self.h_process, address, buffer, bytes, byref(bytesread)) or (use_NtWow64ReadVirtualMemory64 and GetLastError() == 0):
@@ -264,7 +264,7 @@ class WinProcess(BaseProcess):
             # address += bytesread.value
         return data
 
-   
+
     def list_modules(self):
         # returns a dictionary of module name to base address
         module_list = {}
@@ -297,4 +297,3 @@ class WinProcess(BaseProcess):
             return 'Unable to disassemble at %08x' % address
 
         return pydasm.get_instruction(data, pydasm.MODE_32)
-

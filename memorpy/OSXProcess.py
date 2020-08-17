@@ -16,15 +16,15 @@
 
 import copy
 import struct
-import utils
+import memorpy.utils
 import platform
 import ctypes, re, sys
 import ctypes.util
 import errno
 import os
 import signal
-from BaseProcess import BaseProcess, ProcessException
-from structures import *
+from .BaseProcess import BaseProcess, ProcessException
+from .structures import *
 import logging
 import subprocess
 
@@ -150,7 +150,7 @@ class OSXProcess(BaseProcess):
                         address.value += mapsize.value
                         continue
                 yield address.value, mapsize.value
-            
+
             address.value += mapsize.value
 
 
@@ -161,7 +161,7 @@ class OSXProcess(BaseProcess):
     def read_bytes(self, address, bytes = 4):
         pdata = ctypes.c_void_p(0)
         data_cnt = ctypes.c_uint32(0)
-        
+
         ret = libc.mach_vm_read(self.task, ctypes.c_ulonglong(address), ctypes.c_longlong(bytes), ctypes.pointer(pdata), ctypes.pointer(data_cnt));
         #if ret==1:
         #    return ""
@@ -170,5 +170,3 @@ class OSXProcess(BaseProcess):
         buf=ctypes.string_at(pdata.value, data_cnt.value)
         libc.vm_deallocate(self.mytask, pdata, data_cnt)
         return buf
-
-
